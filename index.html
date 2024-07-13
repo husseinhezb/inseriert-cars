@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hussein Makki - Home</title>
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #2c2c2c;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        #pageTitle {
+            flex-grow: 1;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .menu-button, button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .menu-button:hover, button:hover {
+            background-color: #45a049;
+        }
+        .menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 20px;
+            background-color: #2c2c2c;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        .menu-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .menu-item:hover {
+            background-color: #3a3a3a;
+        }
+        .container {
+            margin: 20px;
+            padding: 20px;
+            background-color: #2c2c2c;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            padding: 10px;
+            width: calc(100% - 22px);
+            box-sizing: border-box;
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border: 1px solid #555;
+            border-radius: 5px;
+        }
+        .input-group button {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-group button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        table, th, td {
+            border: 1px solid #444;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #3a3a3a;
+        }
+        tr:nth-child(even) {
+            background-color: #333333;
+        }
+        tr:nth-child(odd) {
+            background-color: #2c2c2c;
+        }
+        .btn-edit {
+            background-color: #ffa500;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .btn-remove {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+        .btn-link {
+            background-color: #800080;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .stats div {
+            padding: 10px;
+            background-color: #3a3a3a;
+            border-radius: 5px;
+            text-align: center;
+            flex: 1;
+            margin: 0 5px;
+        }
+        .period-button, .period-remove-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .period-remove-button {
+            background-color: #ff0000;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+</head>
+<body onload="initializePage()">
+    <header>
+        <div class="menu-button" onclick="toggleMenu()">☰</div>
+        <span id="pageTitle">Hussein Makki - Home</span>
+        <button id="endPeriodButton" onclick="endPeriod()">Periode beenden</button>
+        <button id="closePeriodButton" style="display:none;" onclick="closePeriod()">Periode schließen</button>
+        <div class="menu" id="menu">
+            <div class="menu-item" onclick="showHome()">Home</div>
+            <div class="menu-item" onclick="showNewInserierteAutos()">Neu Inserierte Autos</div>
+            <div class="menu-item" onclick="showPeriods()">Perioden</div>
+            <div class="menu-item" onclick="showSettings()">Einstellungen</div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="stats">
+            <div id="totalEarnings">Gesamtverdienst: €0</div>
+            <div id="periodEarnings">Verdienst: €0</div>
+            <div id="homeCarsCount">Home: 0 Autos</div>
+            <div id="newCarsCount">Neu Inseriert: 0 Autos</div>
+        </div>
+    </div>
+    <div class="container" id="homeContainer">
+        <div class="input-group">
+            <label for="carId">Inserats-Nr.:</label>
+            <input type="text" id="carId">
+        </div>
+        <div class="input-group">
+            <label for="carName">Fahrzeug:</label>
+            <input type="text" id="carName">
+        </div>
+        <div class="input-group">
+            <label for="carDate">Inseriert am:</label>
+            <input type="text" id="carDate">
+            <button type="button" onclick="setToday()">Heute</button>
+        </div>
+        <div class="input-group">
+            <label for="carLink">Link:</label>
+            <input type="text" id="carLink">
+        </div>
+        <button id="submitButton" onclick="addCar()">Inseriert</button>
+        <button id="cancelButton" style="display:none;" onclick="cancelEdit()">Abbrechen</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Inserats-Nr.</th>
+                    <th>Fahrzeug</th>
+                    <th>Inseriert am</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody id="carList"></tbody>
+        </table>
+    </div>
+    <div class="container" id="newInserierteAutosContainer" style="display: none;">
+        <div class="input-group">
+            <label for="newCarId">Inserats-Nr.:</label>
+            <input type="text" id="newCarId">
+        </div>
+        <div class="input-group">
+            <label for="newCarName">Fahrzeug:</label>
+            <input type="text" id="newCarName">
+        </div>
+        <div class="input-group">
+            <label for="newCarDate">Neu inseriert am:</label>
+            <input type="text" id="newCarDate">
+            <button type="button" onclick="setNewToday()">Heute</button>
+        </div>
+        <div class="input-group">
+            <label for="newCarLink">Link:</label>
+            <input type="text" id="newCarLink">
+        </div>
+        <button id="newSubmitButton" onclick="addNewCar()">Neu inseriert</button>
+        <button id="newCancelButton" style="display:none;" onclick="cancelEdit()">Abbrechen</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Inserats-Nr.</th>
+                    <th>Fahrzeug</th>
+                    <th>Neu inseriert am</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody id="newCarList"></tbody>
+        </table>
+    </div>
+    <div class="container" id="periodContainer" style="display: none;">
+        <div id="periodList"></div>
+    </div>
+    <div class="container" id="settingsContainer" style="display: none;">
+        <div class="input-group">
+            <label for="totalEarningsInput">Gesamtverdienst:</label>
+            <input type="text" id="totalEarningsInput">
+        </div>
+        <button onclick="updateTotalEarnings()">Gesamtverdienst aktualisieren</button>
+        <div class="input-group" style="margin-top: 20px;">
+            <button onclick="resetLocalStorage()">Zurücksetzen</button>
+        </div>
+    </div>
+
+    <script>
+        let cars = [];
+        let newCars = [];
+        let periods = [];
+        let totalEarnings = 0;
+        let periodEarnings = 0;
+        let editIndex = null;
+        let currentPeriodIndex = null;
+
+        async function initializePage() {
+            await loadCarsFromServer();
+            renderPeriods();
+            updatePageTitle();
+            updateEndPeriodButton();
+            updateCarCounts();
+        }
+
+        function setToday() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            document.getElementById('carDate').value = `${day}.${month}.${year}`;
+        }
+
+        function setNewToday() {
+            const today = new Date();
+            const day = String(today.getDate()).padStart(2, '0');
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const year = today.getFullYear();
+            document.getElementById('newCarDate').value = `${day}.${month}.${year}`;
+        }
+
+        async function addCar() {
+            const carId = document.getElementById('carId').value;
+            const carName = document.getElementById('carName').value;
+            const carDate = document.getElementById('carDate').value;
+            const carLink = document.getElementById('carLink').value;
+            if (!carId || !carName || !carDate) {
+                alert("Bitte füllen Sie alle erforderlichen Felder aus.");
+                return;
+            }
+
+            if (editIndex !== null) {
+                cars[editIndex] = { carId, carName, carDate, carLink, timestamp: Date.now() };
+                document.getElementById('submitButton').textContent = 'Inseriert';
+                document.getElementById('cancelButton').style.display = 'none';
+                editIndex = null;
+            } else {
+                cars.push({ carId, carName, carDate, carLink, timestamp: Date.now() });
+                totalEarnings += 5;
+                periodEarnings += 5;
+                document.getElementById('totalEarnings').textContent = `Gesamtverdienst: €${totalEarnings}`;
+                document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+                updatePeriodEarnings();
+            }
+
+            document.getElementById('carId').value = '';
+            document.getElementById('carName').value = '';
+            document.getElementById('carDate').value = '';
+            document.getElementById('carLink').value = '';
+
+            await saveCarsToServer();
+            renderTable();
+            updateCarCounts();
+        }
+
+        async function addNewCar() {
+            const carId = document.getElementById('newCarId').value;
+            const carName = document.getElementById('newCarName').value;
+            const carDate = document.getElementById('newCarDate').value;
+            const carLink = document.getElementById('newCarLink').value;
+            if (!carId || !carName || !carDate) {
+                alert("Bitte füllen Sie alle erforderlichen Felder aus.");
+                return;
+            }
+
+            if (editIndex !== null) {
+                newCars[editIndex] = { carId, carName, carDate, carLink, timestamp: Date.now() };
+                document.getElementById('newSubmitButton').textContent = 'Neu inseriert';
+                document.getElementById('newCancelButton').style.display = 'none';
+                editIndex = null;
+            } else {
+                newCars.push({ carId, carName, carDate, carLink, timestamp: Date.now() });
+                totalEarnings += 2.5;
+                periodEarnings += 2.5;
+                document.getElementById('totalEarnings').textContent = `Gesamtverdienst: €${totalEarnings}`;
+                document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+                updatePeriodEarnings();
+            }
+
+            document.getElementById('newCarId').value = '';
+            document.getElementById('newCarName').value = '';
+            document.getElementById('newCarDate').value = '';
+            document.getElementById('newCarLink').value = '';
+
+            await saveCarsToServer();
+            renderNewTable();
+            updateCarCounts();
+        }
+
+        function cancelEdit() {
+            document.getElementById('carId').value = '';
+            document.getElementById('carName').value = '';
+            document.getElementById('carDate').value = '';
+            document.getElementById('carLink').value = '';
+            document.getElementById('submitButton').textContent = 'Inseriert';
+            document.getElementById('cancelButton').style.display = 'none';
+            document.getElementById('newCarId').value = '';
+            document.getElementById('newCarName').value = '';
+            document.getElementById('newCarDate').value = '';
+            document.getElementById('newCarLink').value = '';
+            document.getElementById('newSubmitButton').textContent = 'Neu inseriert';
+            document.getElementById('newCancelButton').style.display = 'none';
+            editIndex = null;
+        }
+
+        function renderTable() {
+            const carList = document.getElementById('carList');
+            carList.innerHTML = '';
+
+            cars.sort((a, b) => {
+                const [dayA, monthA, yearA] = a.carDate.split('.');
+                const [dayB, monthB, yearB] = b.carDate.split('.');
+                const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+                const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+                return dateB - dateA || b.timestamp - a.timestamp;
+            });
+
+            cars.forEach((car, index) => {
+                const row = carList.insertRow();
+                row.insertCell(0).textContent = car.carId;
+                row.insertCell(1).textContent = car.carName;
+                row.insertCell(2).textContent = car.carDate;
+                const actionsCell = row.insertCell(3);
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Bearbeiten';
+                editButton.classList.add('btn-edit');
+                editButton.onclick = () => editCar(index);
+                actionsCell.appendChild(editButton);
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Entfernen';
+                removeButton.classList.add('btn-remove');
+                removeButton.onclick = () => removeCar(index);
+                actionsCell.appendChild(removeButton);
+
+                if (car.carLink) {
+                    const linkButton = document.createElement('button');
+                    linkButton.textContent = 'Link öffnen';
+                    linkButton.classList.add('btn-link');
+                    linkButton.onclick = () => window.open(car.carLink, '_blank');
+                    actionsCell.appendChild(linkButton);
+                }
+            });
+        }
+
+        function renderNewTable() {
+            const newCarList = document.getElementById('newCarList');
+            newCarList.innerHTML = '';
+
+            newCars.sort((a, b) => {
+                const [dayA, monthA, yearA] = a.carDate.split('.');
+                const [dayB, monthB, yearB] = b.carDate.split('.');
+                const dateA = new Date(`${yearA}-${monthA}-${dayA}`);
+                const dateB = new Date(`${yearB}-${monthB}-${dayB}`);
+                return dateB - dateA || b.timestamp - a.timestamp;
+            });
+
+            newCars.forEach((car, index) => {
+                const row = newCarList.insertRow();
+                row.insertCell(0).textContent = car.carId;
+                row.insertCell(1).textContent = car.carName;
+                row.insertCell(2).textContent = car.carDate;
+                const actionsCell = row.insertCell(3);
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Bearbeiten';
+                editButton.classList.add('btn-edit');
+                editButton.onclick = () => editNewCar(index);
+                actionsCell.appendChild(editButton);
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Entfernen';
+                removeButton.classList.add('btn-remove');
+                removeButton.onclick = () => removeNewCar(index);
+                actionsCell.appendChild(removeButton);
+
+                if (car.carLink) {
+                    const linkButton = document.createElement('button');
+                    linkButton.textContent = 'Link öffnen';
+                    linkButton.classList.add('btn-link');
+                    linkButton.onclick = () => window.open(car.carLink, '_blank');
+                    actionsCell.appendChild(linkButton);
+                }
+            });
+        }
+
+        function editCar(index) {
+            const car = cars[index];
+            document.getElementById('carId').value = car.carId;
+            document.getElementById('carName').value = car.carName;
+            document.getElementById('carDate').value = car.carDate;
+            document.getElementById('carLink').value = car.carLink;
+            document.getElementById('submitButton').textContent = 'Speichern';
+            document.getElementById('cancelButton').style.display = 'inline-block';
+            editIndex = index;
+        }
+
+        function editNewCar(index) {
+            const car = newCars[index];
+            document.getElementById('newCarId').value = car.carId;
+            document.getElementById('newCarName').value = car.carName;
+            document.getElementById('newCarDate').value = car.carDate;
+            document.getElementById('newCarLink').value = car.carLink;
+            document.getElementById('newSubmitButton').textContent = 'Speichern';
+            document.getElementById('newCancelButton').style.display = 'inline-block';
+            editIndex = index;
+        }
+
+        async function removeCar(index) {
+            const car = cars[index];
+            cars.splice(index, 1);
+            totalEarnings -= 5;
+            periodEarnings -= 5;
+            document.getElementById('totalEarnings').textContent = `Gesamtverdienst: €${totalEarnings}`;
+            document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+            if (currentPeriodIndex !== null) {
+                periods[currentPeriodIndex].earnings -= 5;
+                periods[currentPeriodIndex].cars = cars;
+                renderPeriods();
+                updatePageTitle();
+            }
+            await saveCarsToServer();
+            renderTable();
+            updateCarCounts();
+        }
+
+        async function removeNewCar(index) {
+            const car = newCars[index];
+            newCars.splice(index, 1);
+            totalEarnings -= 2.5;
+            periodEarnings -= 2.5;
+            document.getElementById('totalEarnings').textContent = `Gesamtverdienst: €${totalEarnings}`;
+            document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+            if (currentPeriodIndex !== null) {
+                periods[currentPeriodIndex].earnings -= 2.5;
+                periods[currentPeriodIndex].newCars = newCars;
+                renderPeriods();
+                updatePageTitle();
+            }
+            await saveCarsToServer();
+            renderNewTable();
+            updateCarCounts();
+        }
+
+        async function endPeriod() {
+            const periodName = new Date().toLocaleDateString('de-DE');
+            periods.push({ name: periodName, earnings: periodEarnings, cars: [...cars], newCars: [...newCars] });
+            cars = [];
+            newCars = [];
+            periodEarnings = 0;
+            document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+            await saveCarsToServer();
+            renderPeriods();
+            renderTable();
+            renderNewTable();
+            updateEndPeriodButton();
+            updateCarCounts();
+        }
+
+        function updatePeriodEarnings() {
+            if (currentPeriodIndex !== null) {
+                periods[currentPeriodIndex].earnings = periodEarnings;
+                renderPeriods();
+                updatePageTitle();
+            }
+        }
+
+        function renderPeriods() {
+            const periodsContainer = document.getElementById('periodList');
+            periodsContainer.innerHTML = '';
+            periods.forEach((period, index) => {
+                const periodItem = document.createElement('div');
+                periodItem.classList.add('menu-item');
+                periodItem.textContent = `${period.name} - €${period.earnings}`;
+
+                const showButtonHome = document.createElement('button');
+                showButtonHome.textContent = 'Anzeigen (Home)';
+                showButtonHome.classList.add('period-button');
+                showButtonHome.onclick = () => loadPeriod(index, 'home');
+                periodItem.appendChild(showButtonHome);
+
+                const showButtonNew = document.createElement('button');
+                showButtonNew.textContent = 'Anzeigen (Neu)';
+                showButtonNew.classList.add('period-button');
+                showButtonNew.onclick = () => loadPeriod(index, 'new');
+                periodItem.appendChild(showButtonNew);
+
+                const removeButton = document.createElement('button');
+                removeButton.textContent = 'Entfernen';
+                removeButton.classList.add('period-remove-button');
+                removeButton.onclick = () => deletePeriod(index);
+                periodItem.appendChild(removeButton);
+
+                periodsContainer.appendChild(periodItem);
+            });
+        }
+
+        async function deletePeriod(index) {
+            const period = periods[index];
+            totalEarnings -= period.earnings;
+            document.getElementById('totalEarnings').textContent = `Gesamtverdienst: €${totalEarnings}`;
+            periods.splice(index, 1);
+
+            // Überprüfen, ob die aktuell angezeigte Periode gelöscht wird
+            if (currentPeriodIndex === index) {
+                closePeriod();
+            }
+
+            await saveCarsToServer();
+            renderPeriods();
+            updatePageTitle('Perioden'); // Aktualisiere den Titel, um "Perioden" anzuzeigen
+        }
+
+        function loadPeriod(index, type) {
+            const period = periods[index];
+            if (type === 'home') {
+                cars = period.cars || [];
+                renderTable();
+                document.getElementById('homeContainer').style.display = 'block';
+                document.getElementById('newInserierteAutosContainer').style.display = 'none';
+            } else if (type === 'new') {
+                newCars = period.newCars || [];
+                renderNewTable();
+                document.getElementById('homeContainer').style.display = 'none';
+                document.getElementById('newInserierteAutosContainer').style.display = 'block';
+            }
+            periodEarnings = period.earnings;
+            document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+            currentPeriodIndex = index;
+            updatePageTitle();
+            document.getElementById('closePeriodButton').style.display = 'inline-block';
+            document.getElementById('endPeriodButton').style.display = 'none';
+        }
+
+        function closePeriod() {
+            cars = [];
+            newCars = [];
+            periodEarnings = 0;
+            document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+            currentPeriodIndex = null;
+            renderTable();
+            renderNewTable();
+            updatePageTitle('Perioden'); // Aktualisiere den Titel, um "Perioden" anzuzeigen
+            document.getElementById('homeContainer').style.display = 'none';
+            document.getElementById('newInserierteAutosContainer').style.display = 'none';
+            document.getElementById('periodContainer').style.display = 'block';
+            document.getElementById('closePeriodButton').style.display = 'none';
+            document.getElementById('endPeriodButton').style.display = 'none';
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function showPeriods() {
+            const periodContainer = document.getElementById('periodContainer');
+            periodContainer.style.display = 'block';
+            document.getElementById('homeContainer').style.display = 'none';
+            document.getElementById('newInserierteAutosContainer').style.display = 'none';
+            document.getElementById('settingsContainer').style.display = 'none';
+            document.getElementById('endPeriodButton').style.display = 'none';
+            toggleMenu();
+            updatePageTitle('Perioden');
+        }
+
+        function showHome() {
+            document.getElementById('homeContainer').style.display = 'block';
+            document.getElementById('newInserierteAutosContainer').style.display = 'none';
+            document.getElementById('periodContainer').style.display = 'none';
+            document.getElementById('settingsContainer').style.display = 'none';
+            document.getElementById('endPeriodButton').style.display = 'inline-block';
+            toggleMenu();
+            updatePageTitle('Home');
+        }
+
+        function showNewInserierteAutos() {
+            document.getElementById('homeContainer').style.display = 'none';
+            document.getElementById('newInserierteAutosContainer').style.display = 'block';
+            document.getElementById('periodContainer').style.display = 'none';
+            document.getElementById('settingsContainer').style.display = 'none';
+            document.getElementById('endPeriodButton').style.display = 'inline-block';
+            toggleMenu();
+            updatePageTitle('Neu Inserierte Autos');
+        }
+
+        function showSettings() {
+            document.getElementById('settingsContainer').style.display = 'block';
+            document.getElementById('homeContainer').style.display = 'none';
+            document.getElementById('newInserierteAutosContainer').style.display = 'none';
+            document.getElementById('periodContainer').style.display = 'none';
+            document.getElementById('endPeriodButton').style.display = 'none';
+            toggleMenu();
+            updatePageTitle('Einstellungen');
+        }
+
+        function updateTotalEarnings() {
+            const newTotalEarnings = parseFloat(document.getElementById('totalEarningsInput').value);
+            if (!isNaN(newTotalEarnings)) {
+                totalEarnings = newTotalEarnings;
+                document.getElementById('totalEarnings').textContent = `Gesamtverdienst: €${totalEarnings}`;
+                saveCarsToServer();
+            } else {
+                alert("Bitte geben Sie einen gültigen Betrag ein.");
+            }
+        }
+
+        async function saveCarsToServer() {
+            const data = { cars, newCars, periods, totalEarnings, currentPeriodIndex };
+            await fetch('/api/data', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        }
+
+        async function loadCarsFromServer() {
+            const response = await fetch('/api/data');
+            const data = await response.json();
+            cars = data.cars;
+            newCars = data.newCars;
+            periods = data.periods;
+            totalEarnings = data.totalEarnings;
+            currentPeriodIndex = data.currentPeriodIndex;
+
+            document.getElementById('totalEarnings').textContent = `Gesamtverdienst: €${totalEarnings}`;
+            if (currentPeriodIndex !== null) {
+                loadPeriod(currentPeriodIndex, 'home');
+            } else {
+                document.getElementById('periodEarnings').textContent = `Verdienst: €${periodEarnings}`;
+                renderTable();
+                renderNewTable();
+            }
+            updateEndPeriodButton();
+            updateCarCounts();
+        }
+
+        function resetLocalStorage() {
+            if (confirm("Sind Sie sicher, dass Sie den lokalen Speicher zurücksetzen möchten?")) {
+                cars = [];
+                newCars = [];
+                periods = [];
+                totalEarnings = 0;
+                periodEarnings = 0;
+                currentPeriodIndex = null;
+                saveCarsToServer();
+                location.reload();
+            }
+        }
+
+        function updatePageTitle(page) {
+            const pageTitle = document.getElementById('pageTitle');
+            if (page) {
+                pageTitle.textContent = `Hussein Makki - ${page}`;
+                document.title = `Hussein Makki - ${page}`;
+            } else if (currentPeriodIndex !== null) {
+                const periodName = periods[currentPeriodIndex].name;
+                pageTitle.textContent = `Hussein Makki - ${periodName}`;
+                document.title = `Hussein Makki - ${periodName}`;
+            } else {
+                pageTitle.textContent = 'Hussein Makki - Home';
+                document.title = 'Hussein Makki - Home';
+            }
+        }
+
+        function updateEndPeriodButton() {
+            if (currentPeriodIndex !== null) {
+                document.getElementById('endPeriodButton').style.display = 'none';
+            } else {
+                document.getElementById('endPeriodButton').style.display = 'inline-block';
+            }
+        }
+
+        function updateCarCounts() {
+            document.getElementById('homeCarsCount').textContent = `Home: ${cars.length} Autos`;
+            document.getElementById('newCarsCount').textContent = `Neu Inseriert: ${newCars.length} Autos`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("#carDate", {
+                dateFormat: "d.m.Y",
+                defaultDate: "today"
+            });
+            flatpickr("#newCarDate", {
+                dateFormat: "d.m.Y",
+                defaultDate: "today"
+            });
+        });
+    </script>
+</body>
+</html>
